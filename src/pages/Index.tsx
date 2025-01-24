@@ -70,12 +70,12 @@ const Index = () => {
   const [dateRange, setDateRange] = useState<keyof typeof dateRangeOptions>("1month");
 
   useEffect(() => {
-    fetch('/sample_habits.csv')
+    fetch('/habits_data.csv')
       .then(response => response.text())
       .then(data => {
         setHabits(parseCSVData(data));
       })
-      .catch(error => console.error('Error loading sample data:', error));
+      .catch(error => console.error('Error loading habits data:', error));
   }, []);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,20 +90,20 @@ const Index = () => {
     reader.readAsText(file);
   };
 
-  const handleDownloadSample = () => {
-    fetch('/sample_habits.csv')
+  const handleDownloadData = () => {
+    fetch('/habits_data.csv')
       .then(response => response.blob())
       .then(blob => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'sample_habits.csv';
+        a.download = 'habits_data.csv';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
       })
-      .catch(error => console.error('Error downloading sample data:', error));
+      .catch(error => console.error('Error downloading habits data:', error));
   };
 
   const startDate = subDays(new Date(), dateRangeOptions[dateRange].days);
@@ -156,10 +156,10 @@ const Index = () => {
                     </Button>
                     <Button
                       variant="outline"
-                      onClick={handleDownloadSample}
+                      onClick={handleDownloadData}
                     >
                       <Download className="mr-2 h-4 w-4" />
-                      Sample CSV
+                      Download CSV
                     </Button>
                     <input
                       id="csv-upload"
