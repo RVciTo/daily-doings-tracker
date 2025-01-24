@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format, isAfter, isBefore, isEqual, eachDayOfInterval } from "date-fns";
 
 interface StreaksViewProps {
@@ -34,25 +33,16 @@ export const StreaksView = ({ habits, startDate }: StreaksViewProps) => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Current Streaks</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Object.entries(habits).map(([habit, dates]) => {
-            const currentStreak = calculateCurrentStreak(dates);
-            return (
-              <Card key={habit} className="bg-accent">
-                <CardContent className="pt-6">
-                  <h3 className="font-semibold text-sm mb-2">{habit}</h3>
-                  <p className="text-2xl font-bold">{currentStreak} days</p>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      </CardContent>
-    </Card>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {Object.entries(habits).map(([habit, dates]) => {
+        const currentStreak = calculateCurrentStreak(dates);
+        return (
+          <div key={habit} className="bg-accent rounded-lg p-4 shadow-sm">
+            <h3 className="font-semibold text-sm mb-2">{habit}</h3>
+            <p className="text-2xl font-bold">{currentStreak} days</p>
+          </div>
+        );
+      })}
+    </div>
   );
 };

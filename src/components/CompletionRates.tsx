@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { eachDayOfInterval } from "date-fns";
 
@@ -22,26 +21,19 @@ export const CompletionRates = ({ habits, startDate }: CompletionRatesProps) => 
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Completion Rates</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-6">
-          {Object.entries(habits).map(([habit, dates]) => {
-            const completionRate = calculateCompletionRate(dates);
-            return (
-              <div key={habit} className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="font-medium">{habit}</span>
-                  <span className="text-muted-foreground">{completionRate}%</span>
-                </div>
-                <Progress value={completionRate} className="h-2" />
-              </div>
-            );
-          })}
-        </div>
-      </CardContent>
-    </Card>
+    <div className="space-y-4">
+      {Object.entries(habits).map(([habit, dates]) => {
+        const completionRate = calculateCompletionRate(dates);
+        return (
+          <div key={habit} className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="font-medium">{habit}</span>
+              <span className="text-muted-foreground">{completionRate}%</span>
+            </div>
+            <Progress value={completionRate} className="h-2" />
+          </div>
+        );
+      })}
+    </div>
   );
 };
