@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { HeatmapChart } from "@/components/HeatmapChart";
 import { StreaksView } from "@/components/StreaksView";
 import { CompletionRates } from "@/components/CompletionRates";
 import { parseCSVData } from "@/utils/csvParser";
 import { Button } from "@/components/ui/button";
-import { format, subDays, subWeeks, subMonths, isAfter } from "date-fns";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { format, subDays } from "date-fns";
 import {
   Select,
   SelectContent,
@@ -13,8 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const generateSampleData = () => {
   const baseData = `date,habit
@@ -62,8 +58,6 @@ const dateRangeOptions = {
 const Index = () => {
   const [habits, setHabits] = useState(() => parseCSVData(generateSampleData()));
   const [dateRange, setDateRange] = useState<keyof typeof dateRangeOptions>("1week");
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -80,17 +74,16 @@ const Index = () => {
   const startDate = subDays(new Date(), dateRangeOptions[dateRange].days);
 
   return (
-    <div className="container py-8">
-      <div className="flex flex-col gap-8">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <h1 className="text-3xl font-bold text-primary">Habit Reports</h1>
-          <div className="flex gap-4 items-center">
+    <div className="container py-8 bg-gray-100 min-h-screen">
+      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+        <h1 className="text-3xl font-bold text-primary mb-8">Habit Tracker Dashboard</h1>
+        
+        <div className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4">Completion Rates</h2>
+          <div className="flex items-center gap-4 mb-4">
             <Select
               value={dateRange}
-              onValueChange={(value: keyof typeof dateRangeOptions) => {
-                setDateRange(value);
-                setSelectedDate(undefined);
-              }}
+              onValueChange={(value: keyof typeof dateRangeOptions) => setDateRange(value)}
             >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select date range" />
@@ -103,25 +96,6 @@ const Index = () => {
                 ))}
               </SelectContent>
             </Select>
-            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-              <PopoverTrigger asChild>
-                <Button variant="outline" onClick={() => setIsCalendarOpen(true)}>
-                  {selectedDate ? format(selectedDate, "PPP") : "Pick a date"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={(date) => {
-                    setSelectedDate(date);
-                    setDateRange("1week");
-                    setIsCalendarOpen(false);
-                  }}
-                  disabled={(date) => isAfter(date, new Date())}
-                />
-              </PopoverContent>
-            </Popover>
             <Button
               variant="outline"
               onClick={() => document.getElementById("csv-upload")?.click()}
@@ -136,24 +110,13 @@ const Index = () => {
               onChange={handleFileUpload}
             />
           </div>
+          <CompletionRates habits={habits} startDate={startDate} />
         </div>
         
-        <Tabs defaultValue="heatmap" className="w-full">
-          <TabsList className="w-full justify-start">
-            <TabsTrigger value="heatmap">Heatmap</TabsTrigger>
-            <TabsTrigger value="streaks">Streaks</TabsTrigger>
-            <TabsTrigger value="completion">Completion Rates</TabsTrigger>
-          </TabsList>
-          <TabsContent value="heatmap">
-            <HeatmapChart habits={habits} startDate={startDate} />
-          </TabsContent>
-          <TabsContent value="streaks">
-            <StreaksView habits={habits} startDate={startDate} />
-          </TabsContent>
-          <TabsContent value="completion">
-            <CompletionRates habits={habits} startDate={startDate} />
-          </TabsContent>
-        </Tabs>
+        <div>
+          <h2 className="text-2xl font-semibold mb-4">Streaks</h2>
+          <StreaksView habits={habits} startDate={startDate} />
+        </div>
       </div>
     </div>
   );
