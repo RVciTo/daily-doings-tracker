@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StreaksView } from "@/components/StreaksView";
 import { CompletionRates } from "@/components/CompletionRates";
 import { parseCSVData } from "@/utils/csvParser";
@@ -66,8 +66,17 @@ const dateRangeOptions = {
 } as const;
 
 const Index = () => {
-  const [habits, setHabits] = useState(() => parseCSVData(generateSampleData()));
+  const [habits, setHabits] = useState<Record<string, string[]>>({});
   const [dateRange, setDateRange] = useState<keyof typeof dateRangeOptions>("1month");
+
+  useEffect(() => {
+    fetch('/sample_habits.csv')
+      .then(response => response.text())
+      .then(data => {
+        setHabits(parseCSVData(data));
+      })
+      .catch(error => console.error('Error loading sample data:', error));
+  }, []);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -82,16 +91,19 @@ const Index = () => {
   };
 
   const handleDownloadSample = () => {
-    const sampleData = generateSampleData();
-    const blob = new Blob([sampleData], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'sample_habits.csv';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    fetch('/sample_habits.csv')
+      .then(response => response.blob())
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'sample_habits.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      })
+      .catch(error => console.error('Error downloading sample data:', error));
   };
 
   const startDate = subDays(new Date(), dateRangeOptions[dateRange].days);
