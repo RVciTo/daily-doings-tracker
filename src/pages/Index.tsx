@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { HabitGrid } from "@/components/HabitGrid";
 import { HeatmapChart } from "@/components/HeatmapChart";
 import { StreaksView } from "@/components/StreaksView";
 import { CompletionRates } from "@/components/CompletionRates";
 import { parseCSVData } from "@/utils/csvParser";
 import { Button } from "@/components/ui/button";
-import { format, subDays, subWeeks, subMonths } from "date-fns";
+import { format, subDays, subWeeks, subMonths, isAfter } from "date-fns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
@@ -14,6 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const generateSampleData = () => {
   const baseData = `date,habit
@@ -61,7 +62,8 @@ const dateRangeOptions = {
 const Index = () => {
   const [habits, setHabits] = useState(() => parseCSVData(generateSampleData()));
   const [dateRange, setDateRange] = useState<keyof typeof dateRangeOptions>("1week");
-  const currentDate = format(new Date(), "yyyy-MM-dd");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -85,7 +87,10 @@ const Index = () => {
           <div className="flex gap-4 items-center">
             <Select
               value={dateRange}
-              onValueChange={(value: keyof typeof dateRangeOptions) => setDateRange(value)}
+              onValueChange={(value: keyof typeof dateRangeOptions) => {
+                setDateRange(value);
+                setSelectedDate(undefined);
+              }}
             >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select date range" />
@@ -98,6 +103,25 @@ const Index = () => {
                 ))}
               </SelectContent>
             </Select>
+            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+              <PopoverTrigger asChild>
+                <Button variant="outline" onClick={() => setIsCalendarOpen(true)}>
+                  {selectedDate ? format(selectedDate, "PPP") : "Pick a date"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={(date) => {
+                    setSelectedDate(date);
+                    setDateRange("1week");
+                    setIsCalendarOpen(false);
+                  }}
+                  disabled={(date) => isAfter(date, new Date())}
+                />
+              </PopoverContent>
+            </Popover>
             <Button
               variant="outline"
               onClick={() => document.getElementById("csv-upload")?.click()}
@@ -130,8 +154,6 @@ const Index = () => {
             <CompletionRates habits={habits} startDate={startDate} />
           </TabsContent>
         </Tabs>
-        
-        <HabitGrid habits={habits} currentDate={currentDate} />
       </div>
     </div>
   );
