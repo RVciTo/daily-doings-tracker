@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ResponsiveContainer, Tooltip, XAxis, YAxis, RectangleChart, Rectangle } from "recharts";
+import { ResponsiveContainer, Tooltip, XAxis, YAxis, ScatterChart, Scatter, Cell } from "recharts";
 import { format, eachDayOfInterval, startOfDay, endOfDay } from "date-fns";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -62,8 +62,7 @@ export const HeatmapChart = ({ habits, startDate }: HeatmapChartProps) => {
         <div className="h-[500px] w-full overflow-x-auto">
           <div className="min-w-[800px] h-full">
             <ResponsiveContainer width="100%" height="100%">
-              <RectangleChart
-                data={data}
+              <ScatterChart
                 margin={{ 
                   top: 20, 
                   right: 20, 
@@ -74,7 +73,7 @@ export const HeatmapChart = ({ habits, startDate }: HeatmapChartProps) => {
                 <XAxis
                   dataKey="date"
                   name="Date"
-                  tickFormatter={(date) => format(date, 'MM/dd')}
+                  tickFormatter={(date) => format(new Date(date), 'MM/dd')}
                   type="number"
                   domain={[startDate.getTime(), endDate.getTime()]}
                   tickCount={7}
@@ -87,22 +86,16 @@ export const HeatmapChart = ({ habits, startDate }: HeatmapChartProps) => {
                   tick={{ fontSize: isMobile ? 10 : 12 }}
                 />
                 <Tooltip content={<CustomTooltip />} />
-                <Rectangle
-                  dataKey="value"
-                  stroke="#8884d8"
-                  fill="#8884d8"
-                  fillOpacity={0.8}
-                  isAnimationActive={false}
-                >
+                <Scatter data={data} shape="square">
                   {data.map((entry, index) => (
-                    <Rectangle
+                    <Cell
                       key={`cell-${index}`}
                       fill={getColor(entry.value)}
                       className="hover:opacity-80 transition-opacity"
                     />
                   ))}
-                </Rectangle>
-              </RectangleChart>
+                </Scatter>
+              </ScatterChart>
             </ResponsiveContainer>
           </div>
         </div>
