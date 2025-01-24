@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { HabitGrid } from "@/components/HabitGrid";
+import { HeatmapChart } from "@/components/HeatmapChart";
 import { parseCSVData } from "@/utils/csvParser";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
@@ -30,7 +31,7 @@ const Index = () => {
     <div className="container py-8">
       <div className="flex flex-col gap-8">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-primary">Habit Tracker</h1>
+          <h1 className="text-3xl font-bold text-primary">Habit Reports</h1>
           <Button
             variant="outline"
             onClick={() => document.getElementById("csv-upload")?.click()}
@@ -46,6 +47,7 @@ const Index = () => {
           />
         </div>
         
+        <HeatmapChart habits={habits} />
         <HabitGrid habits={habits} currentDate={currentDate} />
       </div>
     </div>
