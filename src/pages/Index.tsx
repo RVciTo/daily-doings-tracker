@@ -15,36 +15,45 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { InfoIcon, Download } from "lucide-react";
 
 const generateSampleData = () => {
-  return `date,habit
-2024-11-01,"Slept 7h or more"
-2024-11-01,"Workout 15m or more"
-2024-11-01,"Yoga, Stretching or Core 10m or more"
-2024-11-01,"Cold shower 1m or more"
-2024-11-01,"Proteins above 150g"
-2024-11-01,"No addictive products (alcohol or else)"
-2024-11-01,"Meditation for 5m or more"
-2024-11-01,"German for 5m or more"
-2024-11-01,"Flashcards for 5m or more"
-2024-11-01,"Books for 5m or more"
-2024-11-01,"Free Learning or MarketWatch"
-2024-11-01,"Certified training for 15m or more"
-2024-11-01,"Screens & Social under 1h"
-2024-11-01,"Morning Self-Care & Cleaning routine"
-2024-11-01,"Breathwork for 5m or more"
-2024-11-01,"Was I kind (4 agreements)?"
-2024-11-01,"Bed time routine (self-care & massage)"
-2025-01-15,"Slept 7h or more"
-2025-01-15,"Morning Self-Care & Cleaning routine"
-2025-01-15,"Yoga, Stretching or Core 10m or more"
-2025-01-15,"Workout 15m or more"
-2025-01-15,"Cold shower 1m or more"
-2025-01-15,"Meditation for 5m or more"
-2025-01-15,"German for 5m or more"
-2025-01-15,"Breathwork for 5m or more"
-2025-01-15,"Certified training for 15m or more"
-2025-01-15,"Screens & Social under 1h"
-2025-01-15,"Was I kind (4 agreements)?"
-2025-01-15,"Proteins above 150g"`;
+  const habits = [
+    "Slept 7h or more",
+    "Workout 15m or more",
+    "Yoga, Stretching or Core 10m or more",
+    "Cold shower 1m or more",
+    "Proteins above 150g",
+    "No addictive products (alcohol or else)",
+    "Meditation for 5m or more",
+    "German for 5m or more",
+    "Flashcards for 5m or more",
+    "Books for 5m or more",
+    "Free Learning or MarketWatch",
+    "Certified training for 15m or more",
+    "Screens & Social under 1h",
+    "Morning Self-Care & Cleaning routine",
+    "Breathwork for 5m or more",
+    "Was I kind (4 agreements)?",
+    "Bed time routine (self-care & massage)"
+  ];
+
+  const startDate = new Date(2023, 0, 1); // Start from January 1, 2023
+  const endDate = new Date(); // Today's date
+  let currentDate = new Date(startDate);
+
+  let csvData = "date,habit\n";
+
+  while (currentDate <= endDate) {
+    const formattedDate = format(currentDate, "yyyy-MM-dd");
+    const numHabits = Math.floor(Math.random() * habits.length) + 1; // Random number of habits completed each day
+    const completedHabits = habits.sort(() => 0.5 - Math.random()).slice(0, numHabits);
+
+    completedHabits.forEach(habit => {
+      csvData += `${formattedDate},"${habit}"\n`;
+    });
+
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return csvData;
 };
 
 const dateRangeOptions = {
