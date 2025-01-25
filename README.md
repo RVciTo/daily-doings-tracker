@@ -33,12 +33,19 @@ To run this project locally, follow these steps:
    npm install
    ```
 
-4. Start the development server:
+4. Start the proxy server:
+   ```
+   npm run proxy
+   ```
+
+5. In a new terminal window, start the development server:
    ```
    npm run dev
    ```
 
-5. Open your browser and visit `http://localhost:5173` (or the port specified in the console output).
+6. Open your browser and visit `http://localhost:5173` (or the port specified in the console output).
+
+Note: The proxy server is necessary to avoid CORS issues when fetching data from external sources. Make sure to keep both the proxy server and the development server running while using the application.
 
 ## Features
 
