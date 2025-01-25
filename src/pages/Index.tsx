@@ -90,22 +90,6 @@ const Index = () => {
     reader.readAsText(file);
   };
 
-  const handleDownloadData = () => {
-    fetch('/habits_data.csv')
-      .then(response => response.blob())
-      .then(blob => {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'habits_data.csv';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      })
-      .catch(error => console.error('Error downloading habits data:', error));
-  };
-
   const startDate = subDays(new Date(), dateRangeOptions[dateRange].days);
 
   return (
@@ -153,13 +137,6 @@ const Index = () => {
                       onClick={() => document.getElementById("csv-upload")?.click()}
                     >
                       Upload CSV
-                    </Button>
-                    <Button
-                      variant="outline"
-                      onClick={handleDownloadData}
-                    >
-                      <Download className="mr-2 h-4 w-4" />
-                      Download CSV
                     </Button>
                     <input
                       id="csv-upload"
