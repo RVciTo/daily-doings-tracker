@@ -7,6 +7,26 @@ interface Quote {
   author: string;
 }
 
+const parseCSV = (text: string): Quote[] => {
+  const lines = text.split('\n');
+  const quotes: Quote[] = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (line) {
+      const match = line.match(/^(?:"([^"]*)")?(?:,)?(?:"([^"]*)")?(?:,)?(?:"([^"]*)")?$/);
+      if (match) {
+        const [, date, text, author] = match;
+        if (text && author) {
+          quotes.push({ text: text.trim(), author: author.trim() });
+        }
+      }
+    }
+  }
+
+  return quotes;
+};
+
 export const QuoteDisplay: React.FC = () => {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [currentQuote, setCurrentQuote] = useState<Quote | null>(null);
@@ -15,13 +35,7 @@ export const QuoteDisplay: React.FC = () => {
     try {
       const response = await fetch('/quotes.csv');
       const data = await response.text();
-      const parsedQuotes = data.split('\n').slice(1)
-        .map(line => {
-          const [date, text, author] = line.split(',').map(item => item.replace(/^"|"$/g, '').trim());
-          return { text, author };
-        })
-        .filter(quote => quote.text && quote.author);
-      return parsedQuotes;
+      return parseCSV(data);
     } catch (error) {
       console.error('Error loading quotes:', error);
       return [];
