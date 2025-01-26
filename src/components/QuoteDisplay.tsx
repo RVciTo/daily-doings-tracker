@@ -11,10 +11,10 @@ const parseCSV = (text: string): Quote[] => {
   const lines = text.split('\n');
   const quotes: Quote[] = [];
 
-  for (let i = 1; i < lines.length; i++) {
+  for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
-    if (line) {
-      const match = line.match(/^"([^"]*)","?([^"]*)"?$/);
+    if (line && line !== "Quote,Author") {
+      const match = line.match(/^"((?:[^"]|"")*)"(?:,|$)"?(.*?)"?$/);
       if (match) {
         const [, quoteText, author] = match;
         const cleanQuote = quoteText.replace(/""/g, '"').trim();
