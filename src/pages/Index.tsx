@@ -70,7 +70,7 @@ const Index = () => {
   const [dateRange, setDateRange] = useState<keyof typeof dateRangeOptions>("1month");
 
   useEffect(() => {
-    fetch('http://localhost:8080/https://www.dropbox.com/scl/fi/gom5fu8tx9ib9c747r6ag/test.csv?rlkey=245hysi00jfc823krmwz2hmk0&st=qnc1de53&dl=1')
+    fetch('/habits_data.csv')
       .then(response => response.text())
       .then(data => {
         setHabits(parseCSVData(data));

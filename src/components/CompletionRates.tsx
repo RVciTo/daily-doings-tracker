@@ -20,21 +20,26 @@ export const CompletionRates = ({ habits, startDate }: CompletionRatesProps) => 
     return Math.round((datesInRange / daysInRange) * 100);
   };
 
+  const sortedHabits = Object.entries(habits)
+    .map(([habit, dates]) => ({
+      habit,
+      dates,
+      completionRate: calculateCompletionRate(dates)
+    }))
+    .sort((a, b) => a.completionRate - b.completionRate);
+
   return (
     <div className="max-h-[60vh] overflow-y-auto pr-4">
       <div className="space-y-4">
-        {Object.entries(habits).map(([habit, dates]) => {
-          const completionRate = calculateCompletionRate(dates);
-          return (
-            <div key={habit} className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="font-medium">{habit}</span>
-                <span className="text-muted-foreground">{completionRate}%</span>
-              </div>
-              <Progress value={completionRate} className="h-2" />
+        {sortedHabits.map(({ habit, dates, completionRate }) => (
+          <div key={habit} className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="font-medium">{habit}</span>
+              <span className="text-muted-foreground">{completionRate}%</span>
             </div>
-          );
-        })}
+            <Progress value={completionRate} className="h-2" />
+          </div>
+        ))}
       </div>
     </div>
   );
