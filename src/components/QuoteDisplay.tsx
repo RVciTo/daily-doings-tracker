@@ -14,12 +14,11 @@ const parseCSV = (text: string): Quote[] => {
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i].trim();
     if (line) {
-      const match = line.match(/^(?:"([^"]*)")?(?:,)?(?:"([^"]*)")?(?:,)?(?:"([^"]*)")?$/);
-      if (match) {
-        const [, date, text, author] = match;
-        if (text && author) {
-          quotes.push({ text: text.trim(), author: author.trim() });
-        }
+      const [quoteText, author] = line.split(',').map(item => item.trim());
+      if (quoteText && author) {
+        const cleanQuote = quoteText.replace(/^"""|"""$/g, '').replace(/""/g, '"');
+        const cleanAuthor = author.replace(/^"""|"""$/g, '').replace(/""/g, '"');
+        quotes.push({ text: cleanQuote, author: cleanAuthor });
       }
     }
   }
@@ -35,7 +34,9 @@ export const QuoteDisplay: React.FC = () => {
     try {
       const response = await fetch('/quotes.csv');
       const data = await response.text();
-      return parseCSV(data);
+      const parsedQuotes = parseCSV(data);
+      console.log('Parsed quotes:', parsedQuotes); // For debugging
+      return parsedQuotes;
     } catch (error) {
       console.error('Error loading quotes:', error);
       return [];
