@@ -1,82 +1,104 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { QuoteDisplay } from '../components/QuoteDisplay';
+import { render, screen, waitFor } from '@testing-library/react';
+import { HealthStats } from '../components/HealthStats';
 
-describe('QuoteDisplay', () => {
+describe('HealthStats', () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
 
-  it('renders a quote and author', async () => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        text: () => Promise.resolve('date,quote,author\n2023-01-01,"Test quote","Test author"'),
-      })
-    ) as jest.Mock;
+  it('renders health stats correctly', async () => {
+    const healthData = {
+      "Active Calories": ["2024-09-12,Active Calories,1162.866205242003"],
+      "Body Fat Percentage": ["2024-02-12,Body Fat Percentage,0"],
+    };
+    const startDate = new Date('2024-01-01');
 
-    render(<QuoteDisplay />);
-    
+    render(<HealthStats healthData={healthData} startDate={startDate} />);
+
     await waitFor(() => {
-      expect(screen.getByText('Test quote')).toBeInTheDocument();
-      expect(screen.getByText('— Test author')).toBeInTheDocument();
+      expect(screen.getByText('Active Calories')).toBeInTheDocument();
+      expect(screen.getByText('Body Fat Percentage')).toBeInTheDocument();
     });
   });
 
   it('handles empty data', async () => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        text: () => Promise.resolve('date,quote,author\n'),
-      })
-    ) as jest.Mock;
+    const healthData = {};
+    const startDate = new Date('2024-01-01');
 
-    render(<QuoteDisplay />);
-    
+    render(<HealthStats healthData={healthData} startDate={startDate} />);
+
     await waitFor(() => {
-      expect(screen.queryByText(/Test quote/)).not.toBeInTheDocument();
-      expect(screen.queryByText(/Test author/)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Active Calories/)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Body Fat Percentage/)).not.toBeInTheDocument();
     });
   });
 
-  it('updates quote when refresh button is clicked', async () => {
-    const mockQuotes = [
-      'date,quote,author\n2023-01-01,"First quote","First author"',
-      'date,quote,author\n2023-01-02,"Second quote","Second author"'
-    ];
-    let callCount = 0;
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        text: () => Promise.resolve(mockQuotes[callCount++]),
-      })
-    ) as jest.Mock;
+  it('calculates min, max, and avg values correctly', async () => {
+    const healthData = {
+      "Active Calories": [
+        "2024-09-12,Active Calories,1162.866205242003",
+        "2024-06-08,Active Calories,743.162",
+        "2024-04-09,Active Calories,597.1159999999998",
+      ],
+    };
+    const startDate = new Date('2024-01-01');
 
-    render(<QuoteDisplay />);
-    
-    await waitFor(() => {
-      expect(screen.getByText('First quote')).toBeInTheDocument();
-      expect(screen.getByText('— First author')).toBeInTheDocument();
-    });
-
-    // Reset mock to simulate a new fetch on button click
-    callCount = 1;
-    fireEvent.click(screen.getByRole('button'));
+    render(<HealthStats healthData={healthData} startDate={startDate} />);
 
     await waitFor(() => {
-      expect(screen.getByText('Second quote')).toBeInTheDocument();
-      expect(screen.getByText('— Second author')).toBeInTheDocument();
+      expect(screen.getByText('Min: 597.116')).toBeInTheDocument();
+      expect(screen.getByText('Max: 1162.866')).toBeInTheDocument();
+      expect(screen.getByText('Avg: 847.999')).toBeInTheDocument();
     });
   });
 
-  it('renders without crashing when no quotes are available', async () => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        text: () => Promise.resolve('date,quote,author\n'),
-      })
-    ) as jest.Mock;
+  it('displays reference lines correctly', async () => {
+    const healthData = {
+      "Active Calories": ["2024-09-12,Active Calories,1162.866205242003"],
+    };
+    const startDate = new Date('2024-01-01');
 
-    render(<QuoteDisplay />);
-    
+    render(<HealthStats healthData={healthData} startDate={startDate} />);
+
     await waitFor(() => {
-      expect(screen.getByRole('button')).toBeInTheDocument();
+      expect(screen.getByText('Ref: 800kcal')).toBeInTheDocument();
+    });
+  });
+
+  it('filters data based on date range', async () => {
+    const healthData = {
+      "Active Calories": [
+        "2024-09-12,Active Calories,1162.866205242003",
+        "2024-06-08,Active Calories,743.162",
+        "2024-04-09,Active Calories,597.1159999999998",
+      ],
+    };
+    const startDate = new Date('2024-07-01');
+
+    render(<HealthStats healthData={healthData} startDate={startDate} />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Min: 1162.866')).toBeInTheDocument();
+      expect(screen.getByText('Max: 1162.866')).toBeInTheDocument();
+      expect(screen.getByText('Avg: 1162.866')).toBeInTheDocument();
+    });
+  });
+
+  it('handles multiple health logs', async () => {
+    const healthData = {
+      "Active Calories": ["2024-09-12,Active Calories,1162.866205242003"],
+      "Body Fat Percentage": ["2024-02-12,Body Fat Percentage,0"],
+      "Protein": ["2024-05-09,Protein,0"],
+    };
+    const startDate = new Date('2024-01-01');
+
+    render(<HealthStats healthData={healthData} startDate={startDate} />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Active Calories')).toBeInTheDocument();
+      expect(screen.getByText('Body Fat Percentage')).toBeInTheDocument();
+      expect(screen.getByText('Protein')).toBeInTheDocument();
     });
   });
 });

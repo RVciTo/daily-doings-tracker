@@ -187,7 +187,7 @@ export const HealthStats = ({ healthData, startDate }: HealthStatsProps) => {
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-              <div className="flex justify-between text-sm">
+              <div className="flex flex-col sm:flex-row justify-between text-sm space-y-2 sm:space-y-0 sm:space-x-4">
                 <span>Min: {minValue}</span>
                 <span>Max: {maxValue}</span>
                 <span>Avg: {avgValue.toFixed(2)}</span>
