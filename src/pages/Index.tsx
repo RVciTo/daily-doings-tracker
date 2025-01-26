@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { StreaksView } from "@/components/StreaksView";
 import { CompletionRates } from "@/components/CompletionRates";
+import { QuoteDisplay } from "@/components/QuoteDisplay";
 import { parseCSVData } from "@/utils/csvParser";
 import { Button } from "@/components/ui/button";
 import { format, subDays } from "date-fns";
@@ -97,6 +98,8 @@ const Index = () => {
       <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="p-8">
           <h1 className="text-3xl font-bold text-primary mb-6">Habit Tracker Dashboard</h1>
+          
+          <QuoteDisplay />
           
           <Alert className="mb-6">
             <InfoIcon className="h-4 w-4" />

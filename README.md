@@ -14,6 +14,23 @@ Daily Doings Tracker is a web application designed to help users track their dai
 - date-fns (for date manipulation)
 - Recharts (for data visualization)
 
+## Project Structure
+
+The project follows a standard React application structure:
+
+- `src/`: Contains the source code of the application
+  - `components/`: Reusable React components
+  - `pages/`: Main page components
+  - `utils/`: Utility functions
+  - `App.tsx`: Main application component
+- `public/`: Static assets and HTML template
+
+Key components:
+- `Index.tsx`: Main dashboard page
+- `CompletionRates.tsx`: Visualizes habit completion rates
+- `StreaksView.tsx`: Displays current streaks for habits
+- `QuoteDisplay.tsx`: Shows inspirational quotes
+
 ## Getting Started
 
 To run this project locally, follow these steps:
@@ -53,6 +70,7 @@ Note: The proxy server is necessary to avoid CORS issues when fetching data from
 - Completion Rates Visualization: The app displays the percentage of days each habit was completed within a selected date range.
 - Current Streaks: Shows the number of consecutive days each habit has been maintained up to the current date.
 - Date Range Selection: Users can select different date ranges to view their habit data.
+- Inspirational Quotes: Displays random inspirational quotes to motivate users.
 - Responsive Design: The application is fully responsive and works well on various screen sizes.
 
 ## How to Use
@@ -61,6 +79,7 @@ Note: The proxy server is necessary to avoid CORS issues when fetching data from
 2. Upload your CSV file using the "Upload CSV" button on the dashboard.
 3. Use the date range selector to adjust the time period for viewing completion rates.
 4. View your habit completion rates and current streaks in the visualizations provided.
+5. Get inspired by the randomly displayed quotes and refresh them using the "New Quote" button.
 
 ## Contributing
 
@@ -69,10 +88,24 @@ Contributions to improve Daily Doings Tracker are welcome. Please follow these s
 1. Fork the repository.
 2. Create a new branch for your feature or bug fix.
 3. Make your changes and commit them with clear, descriptive messages.
-4. Push your changes to your fork.
-5. Submit a pull request with a clear description of your changes.
+4. Ensure your code follows the project's coding standards and practices.
+5. Test your changes thoroughly.
+6. Push your changes to your fork.
+7. Submit a pull request with a clear description of your changes.
+
+### Development Guidelines
+
+- Follow the existing code style and structure.
+- Write clear, self-documenting code and add comments where necessary.
+- Create unit tests for new features or bug fixes.
+- Update the README.md file if you add new features or change existing functionality.
 
 ## License
 
 [Include license information here, if applicable]
+
+## Acknowledgements
+
+- Thanks to all contributors who have helped shape this project.
+- Inspirational quotes provided by [source of quotes, if applicable].
 
