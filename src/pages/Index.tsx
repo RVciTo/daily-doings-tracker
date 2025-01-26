@@ -162,12 +162,12 @@ const Index = () => {
                     Percentage of days each habit was completed within the selected date range.
                   </p>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col sm:flex-row items-center gap-4">
                   <Select
                     value={dateRange}
                     onValueChange={(value: keyof typeof dateRangeOptions) => setDateRange(value)}
                   >
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-full sm:w-[180px]">
                       <SelectValue placeholder="Select date range" />
                     </SelectTrigger>
                     <SelectContent>
@@ -221,7 +221,7 @@ const Index = () => {
                     Percentage of days each health log was completed within the selected date range.
                   </p>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col sm:flex-row items-center gap-4">
                   {/* NEW: separate date range for health */}
                   <Select
                     value={healthDateRange}
@@ -229,7 +229,7 @@ const Index = () => {
                       setHealthDateRange(value)
                     }
                   >
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-full sm:w-[180px]">
                       <SelectValue placeholder="Select date range" />
                     </SelectTrigger>
                     <SelectContent>
