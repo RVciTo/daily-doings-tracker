@@ -31,7 +31,6 @@ export const QuoteDisplay: React.FC = () => {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [currentQuote, setCurrentQuote] = useState<Quote | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [rawData, setRawData] = useState<string>('');
 
   const fetchQuotes = useCallback(async () => {
     try {
@@ -41,7 +40,6 @@ export const QuoteDisplay: React.FC = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.text();
-      setRawData(data.slice(0, 200) + '...'); // Store first 200 characters of raw data
       const parsedQuotes = parseCSV(data);
       return parsedQuotes;
     } catch (error) {
@@ -77,7 +75,6 @@ export const QuoteDisplay: React.FC = () => {
   return (
     <div className="bg-primary/10 rounded-lg p-6 mb-8">
       {error && <p className="text-red-500 mb-4">{error}</p>}
-      <p className="mb-4">Total quotes loaded: {quotes.length}</p>
       {currentQuote ? (
         <>
           <blockquote className="text-xl font-serif italic mb-4">
@@ -93,12 +90,6 @@ export const QuoteDisplay: React.FC = () => {
       <Button onClick={handleNewQuote} className="mt-4" variant="outline" size="icon">
         <RefreshCw className="h-4 w-4" />
       </Button>
-      {rawData && (
-        <div className="mt-4">
-          <p className="font-bold">Raw data (first 200 characters):</p>
-          <pre className="bg-gray-100 p-2 rounded">{rawData}</pre>
-        </div>
-      )}
     </div>
   );
 };
