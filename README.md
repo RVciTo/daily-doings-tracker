@@ -64,6 +64,22 @@ To run this project locally, follow these steps:
 
 Note: The proxy server is necessary to avoid CORS issues when fetching data from external sources. Make sure to keep both the proxy server and the development server running while using the application.
 
+## Running Tests
+
+To run the unit tests for this project:
+
+1. Ensure you have installed the necessary testing dependencies:
+   ```
+   npm install --save-dev jest @testing-library/react @testing-library/jest-dom @types/jest
+   ```
+
+2. Run the tests using the following command:
+   ```
+   npm test
+   ```
+
+This will execute all test files in the project that match the naming convention `*.test.ts` or `*.test.tsx`.
+
 ## Features
 
 - CSV Data Upload: Users can upload their habit tracking data using CSV files.
