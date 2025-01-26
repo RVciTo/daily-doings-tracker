@@ -86,7 +86,7 @@ This will execute all test files in the project that match the naming convention
 - Completion Rates Visualization: The app displays the percentage of days each habit was completed within a selected date range.
 - Current Streaks: Shows the number of consecutive days each habit has been maintained up to the current date.
 - Date Range Selection: Users can select different date ranges to view their habit data.
-- Inspirational Quotes: Displays random inspirational quotes to motivate users.
+- Inspirational Quotes: Displays random inspirational quotes to motivate users using the QuoteDisplay component. Users can refresh quotes with a single click.
 - Responsive Design: The application is fully responsive and works well on various screen sizes.
 
 ## How to Use
