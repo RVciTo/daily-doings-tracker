@@ -6,14 +6,15 @@ export interface HabitEntry {
   habit: string;
 }
 
-export interface HealthEntry {
-  date: string;
-  log: string;
-  value: string;
-}
+// Commented out HealthEntry interface
+// export interface HealthEntry {
+//   date: string;
+//   log: string;
+//   value: string;
+// }
 
 // ---------------------------
-// HABIT PARSING (UNTOUCHED)
+// HABIT PARSING
 // ---------------------------
 export const parseCSVData = (csvContent: string): Record<string, string[]> => {
   const lines = csvContent.split('\n');
@@ -35,26 +36,24 @@ export const parseCSVData = (csvContent: string): Record<string, string[]> => {
   return habits;
 };
 
-// ---------------------------
-// HEALTH PARSING (UPDATED)
-// ---------------------------
-export const parseHealthCSVData = (csvContent: string): Record<string, string[]> => {
-  const lines = csvContent.split('\n');
-  const healthData: Record<string, string[]> = {};
+// Commented out Health parsing function
+// export const parseHealthCSVData = (csvContent: string): Record<string, string[]> => {
+//   const lines = csvContent.split('\n');
+//   const healthData: Record<string, string[]> = {};
 
-  // Skip header
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if (!line) continue;
+//   // Skip header
+//   for (let i = 1; i < lines.length; i++) {
+//     const line = lines[i].trim();
+//     if (!line) continue;
 
-    const [date, log, value] = line.split(',').map(val => val.replace(/"/g, '').trim());
+//     const [date, log, value] = line.split(',').map(val => val.replace(/"/g, '').trim());
 
-    if (!healthData[log]) {
-      healthData[log] = [];
-    }
-    // Store all three pieces: date, log, value
-    healthData[log].push(`${date},${log},${value}`);
-  }
+//     if (!healthData[log]) {
+//       healthData[log] = [];
+//     }
+//     // Store all three pieces: date, log, value
+//     healthData[log].push(`${date},${log},${value}`);
+//   }
 
-  return healthData;
-};
+//   return healthData;
+// };
