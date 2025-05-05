@@ -42,8 +42,8 @@ const Index = () => {
   // EFFECT: LOAD CSVs
   // -----------------------------
   useEffect(() => {
-    // Load HABITS data
-    fetch("/habits_data.csv")
+    // Load HABITS data from Dropbox link
+    fetch("https://www.dl.dropboxusercontent.com/scl/fi/gom5fu8tx9ib9c747r6ag/test.csv?rlkey=245hysi00jfc823krmwz2hmk0&st=ch239w7x")
       .then((response) => response.text())
       .then((data) => {
         setHabits(parseCSVData(data));
